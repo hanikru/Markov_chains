@@ -48,7 +48,12 @@ class Markov_chains:
         rand_vec.insert(-1, 1)
         rand_vec = sorted(rand_vec)
 
-        return [round(rand_vec[i+1] - rand_vec[i], 2) for i in range(self.size)]
+        result = [round(rand_vec[i+1] - rand_vec[i], 10) for i in range(self.size)]
+
+        if sum(result) > 1.0:
+            result[-1] = result[-1] - (sum(result) - 1.0)
+
+        return result
 
     # моделирование переходной вероятности
     def Mtp(self):
@@ -68,11 +73,11 @@ class Markov_chains:
             return None
         
         for i in range(self.size):
-            if vec_temp[i] <= pred < vec_temp[i + 1]:
+            if vec_temp[i] < pred <= vec_temp[i + 1]:
                 self.tra.append(i+1)
                 return i+1
 
-        return 0
+        return 1
 
     # моделирование траектории цепи маркова
     def Mt(self, step):
